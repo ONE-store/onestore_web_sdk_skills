@@ -1,0 +1,214 @@
+<!doctype html>
+<!-- ONE store H5 Game SDK integration template, based on the official sample.
+     Replace: __SDK_VERSION__ (SDK version, starts with v, default v1.1.0)
+     TODO: placementId, productId, requestId issuing
+     UI text is a placeholder; match the game's own language. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Game title</title>
+    <style>
+      * { box-sizing: border-box; }
+      /* 100dvh: 100vh gets cut off on mobile. overscroll-behavior stops bouncing */
+      html, body { height: 100dvh; overflow: hidden; }
+      body { margin: 0; background: #101418; color: #e8eaed;
+             font-family: -apple-system, "Malgun Gothic", sans-serif;
+             display: flex; flex-direction: column; overscroll-behavior: none; }
+
+      /* Loading screen: removed when startGameAsync succeeds */
+      #boot { position: fixed; inset: 0; background: #101418; z-index: 10;
+              display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+      #boot .track { width: 180px; height: 6px; border-radius: 3px; background: #2a3040; overflow: hidden; }
+      #boot .fill { height: 100%; width: 0%; background: #ee3d3d; }
+      #boot p { margin: 0; font-size: 13px; color: #8b93a1; }
+      #boot.done { display: none; }
+
+      main { flex: 1; display: flex; flex-direction: column; align-items: center;
+             justify-content: center; gap: 20px; padding: 20px; }
+      .actions { display: flex; gap: 10px; }
+      .actions button { padding: 13px 18px; border: 0; border-radius: 10px;
+                        font-size: 14px; font-weight: 600; color: #fff; cursor: pointer; }
+      .actions button:disabled { opacity: 0.4; }
+      #btnBuy { background: #ee3d3d; }
+      #btnAd { background: #3d6bee; }
+      #msg { min-height: 3em; font-size: 12px; color: #9aa4b2; text-align: center;
+             padding: 0 16px 16px; word-break: break-all; }
+    </style>
+  </head>
+  <body>
+    <div id="boot">
+      <p>Loading…</p>
+      <div class="track"><div class="fill" id="bootFill"></div></div>
+    </div>
+
+    <main>
+      <!-- Game screen goes here -->
+      <div class="actions">
+        <button id="btnBuy">Buy item</button>
+        <button id="btnAd">Watch an ad for a reward</button>
+      </div>
+    </main>
+    <div id="msg"></div>
+
+    <!-- Load the SDK at the top level of the game document, before the game scripts
+         (initialization fails inside a child iframe). A game script loaded with a plain
+         <script src> runs before this module; give it type="module" or defer. -->
+    <script type="module">
+      import { createSDK } from "https://h5sdk.onestore.net/lib/__SDK_VERSION__/onestore-h5-sdk.min.js";
+
+      function boot() {
+        const sdk = createSDK();
+        const $ = (id) => document.getElementById(id);
+        let ctx = {}; // the initializeAsync result (playerId, etc.)
+
+        function say(m) { $("msg").textContent = m; }
+        // Keep the game playable without the SDK: turn off only what needs the app
+        function runWithoutSdk(why) {
+          $("boot").classList.add("done");
+          $("btnBuy").disabled = true;
+          $("btnAd").disabled = true;
+          say("Running without ONE store features (" + why + ")");
+        }
+        function saveProgress() {
+          // TODO: save progress. Synchronous work that finishes within 0.5 seconds only.
+          // Key it by ctx.playerId (the pseudonymous per-game user ID).
+        }
+
+        /* ── Lifecycle: register before initializeAsync() ──────────── */
+        sdk.on("pause", (e) => {
+          // reason: "background" | "ad" | "payment". Handle it idempotently
+          // TODO: stop the game loop and sound
+        });
+        sdk.on("resume", (e) => {
+          // e.ringerSilent is present only if silent mode changed
+          // TODO: restart the game loop, apply e.ringerSilent
+        });
+        sdk.on("exit", () => {
+          // Only save. No need to call quit() again. Also fires on restart().
+          saveProgress();
+        });
+        sdk.onBackPressed(() => {
+          // Must be synchronous: the app waits 200 ms for the answer
+          // TODO: if an in-game popup is open, close it and return true (consumed)
+          return false; // not consumed → the app's exit confirmation popup
+        });
+
+        /* ── Boot: init → loading progress → start ─────────────── */
+        sdk.initializeAsync()
+          .then((info) => {
+            if (info.err) {
+              // Unsupported environment (for example a regular browser): it resolves
+              // with err, it does not reject. Keep the game running without the SDK so
+              // development keeps working, and turn off features that need the app.
+              runWithoutSdk(info.err);
+              return;
+            }
+            ctx = info;
+            // TODO: handle notches with info.safeArea, apply info.ringerSilent
+            startLoading();
+          })
+          .catch((e) => {
+            console.error("initializeAsync failed", e.reason, e.message);
+            runWithoutSdk(e.reason);
+          });
+
+        function startLoading() {
+          // TODO: report real asset loading progress as 0–100 (the timer below is a demo)
+          let progress = 0;
+          const timer = setInterval(() => {
+            sdk.setLoadingProgress(progress);
+            if (progress >= 100) {
+              clearInterval(timer);
+              sdk.startGameAsync()
+                .then(() => {
+                  $("boot").classList.add("done");
+                  // Feature checks are valid only after init
+                  $("btnBuy").disabled = !sdk.iap.isSupported();
+                  $("btnAd").disabled = !sdk.ads.isSupported("rewarded");
+                  // Preloading early makes the ad show immediately when the button is
+                  // pressed (call loadInterstitial too if you use interstitial ads)
+                  if (!$("btnAd").disabled)
+                    sdk.ads.loadRewarded({ placementId: "" /* TODO: placement ID */ });
+                })
+                .catch((e) => {
+                  console.error("startGameAsync failed", e.reason, e.message);
+                  runWithoutSdk(e.reason);
+                });
+            } else {
+              progress += 5;
+            }
+          }, 100);
+        }
+
+        /* ── In-app purchase ─────────────────────────────────────── */
+        $("btnBuy").addEventListener("click", () => {
+          $("btnBuy").disabled = true;
+          say("Processing purchase…");
+          sdk.iap.purchase({
+            productId: "" /* TODO: in-app product ID */,
+            // productName: "", // optional; if omitted, the registered product name is shown
+            // developerPayload holds what is needed to grant the item. Optional but very
+            //   important: the purchase result and the PNS notification are matched to the
+            //   user and purchase by this value. At most 200 bytes in UTF-8.
+            developerPayload: "" /* TODO: e.g. your user ID and an order key (ctx.playerId can be absent) */,
+          })
+            .then((r) => {
+              // A success response only signals that payment completed. The game
+              //   company's server grants the item after verifying r.purchaseToken. The
+              //   payment notification (PNS) also goes to the server, and consumption is the
+              //   server's job too (buying an unconsumed product again gives already_owned).
+              say("Purchase complete: " + r.productId);
+            })
+            .catch((e) => {
+              // Branch on reason only. Do not show an error for user_cancelled
+              if (e.reason !== "user_cancelled") say("Purchase failed: " + e.reason);
+            })
+            .finally(() => { $("btnBuy").disabled = false; });
+        });
+
+        /* ── Rewarded ad ───────────────────────────────────────── */
+        $("btnAd").addEventListener("click", async () => {
+          // requestId is required. Issuing it on the server and mapping it to the
+          //   user is recommended. The SDK does not generate it.
+          const requestId = "req-" + Date.now(); /* TODO: replace with a server-issued ID */
+          $("btnAd").disabled = true;
+          const r = await sdk.ads.showRewardedAsync({
+            placementId: "" /* TODO: placement ID */,
+            requestId,
+          });
+          // Failures do not throw; they come back in status
+          if (r.status === "rewarded") {
+            // Only a signal for the reward effect. The grant is confirmed through SSV →
+            //   verification → the game company's server postback. Do not grant here.
+            say("Reward requested (waiting for the server postback)");
+          } else if (r.status === "dismissed") {
+            say("No reward: the ad was not watched to the end.");
+          } else {
+            // failed, including no_fill (no inventory), is not rewarded. Do not block progress
+            say("The ad could not be shown. (" + (r.reason || "failed") + ")");
+          }
+          $("btnAd").disabled = false;
+        });
+
+        /* ── Interstitial ad (optional) ────────────────────────────── */
+        // Call at a natural break, such as a stage clear. No reward and no requestId.
+        async function showInterstitial() {
+          if (!sdk.ads.isSupported("interstitial")) return;
+          const r = await sdk.ads.showInterstitialAsync({
+            placementId: "" /* TODO: interstitial placement ID */,
+          });
+          // completed or failed: continue the game either way
+          if (r.status === "failed") console.warn("interstitial failed", r.reason);
+        }
+      }
+
+      // Run boot even if the document already finished loading
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", boot);
+      } else {
+        boot();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+
+                         ONE store H5 Game SDK
+                        License Agreement, v1.0
+                          September 30, 2026
+
+ TERMS AND CONDITIONS FOR USE OF THE ONE STORE H5 GAME SDK AND THIS REPOSITORY
+
+       Distribution: https://h5sdk.onestore.net/lib/{version}/
+        Copyright (c) 2026 ONE store Corp. All Rights Reserved.
+
+   1. License Grant.
+
+   ONE store Corp. ("Company") provides the ONE store H5 Game SDK
+   ("SDK") free of charge and grants Developer a non-exclusive,
+   non-transferable license to use it. This license is provided for the
+   SDK in its distributed form only (JavaScript bundles delivered from
+   the ONE store CDN); source code is not included.
+
+   This license applies to the following ONE store proprietary module:
+
+   (a) ONE store H5 Game SDK (onestore-h5-sdk.js, onestore-h5-sdk.min.js).
+
+   This repository (ONE store Web SDK Skill) is provided for use under
+   this Agreement. Developer may copy, modify, and include the contents
+   of this repository, including the reference code, in Developer's
+   games.
+
+   2. Permitted Uses.
+
+   Developer may:
+
+   (a) Integrate the SDK into Developer's HTML5 game to implement
+       lifecycle, in-app advertising, and in-app purchase functionality;
+   (b) Use the SDK for development and testing purposes;
+   (c) Distribute and redistribute games developed with the SDK;
+   (d) Conduct reasonable security research to test SDK security;
+   (e) Use the SDK for internal business purposes.
+
+   3. Restrictions.
+
+   Developer may not:
+
+   (a) Reverse engineer, decompile, disassemble, or attempt to derive
+       source code from the SDK;
+   (b) Modify, alter, or create derivative works of the SDK;
+   (c) Redistribute or provide the SDK to third parties without
+       authorization;
+   (d) Use the SDK to interfere with or conduct denial-of-service attacks
+       on ONE store services;
+   (e) Develop or deploy functionality designed to bypass or manipulate
+       the payment process;
+   (f) Conduct fraudulent, illegal, or infringing transactions;
+   (g) Use the SDK in third-party applications without authorization.
+
+   4. Payment Integration.
+
+   The SDK is an API wrapper for the ONE store payment system. Actual
+   payment processing is performed on ONE store servers. Developer must
+   comply with the following:
+
+   (a) Maintain and do not manipulate the integrity of the payment flow
+       provided by the SDK;
+   (b) The SDK does not expose credit card data; Developer shall not
+       store, log, or process such data;
+   (c) Display accurate product prices and payment terms to users;
+   (d) Handle payment errors and failures appropriately and notify users;
+   (e) Cooperate with ONE store's fraud prevention efforts and report
+       suspicious transactions.
+
+   PCI DSS Compliance: The SDK does not expose credit card data to
+   Developer, therefore Developer is not required to obtain PCI DSS
+   certification.
+
+   5. Third-Party Components.
+
+   The SDK does not include third-party components.
+
+   6. Intellectual Property.
+
+   The SDK and all related intellectual property rights are owned by
+   ONE store Corp. Developer acquires no rights to ONE store's
+   intellectual property through the use of the SDK. Developer must comply
+   with all license documents provided or referenced with the SDK.
+
+   7. Disclaimer of Warranty.
+
+   The SDK and this repository are provided "as-is" without any express
+   or implied warranty. ONE store disclaims all warranties, including but
+   not limited to implied warranties of merchantability, fitness for a
+   particular purpose, and non-infringement.
+
+   8. Limitation of Liability.
+
+   In no event shall ONE store be liable except for direct damages.
+   ONE store shall not be liable for indirect, special, consequential, or
+   punitive damages, except for damages caused by gross negligence or
+   willful misconduct.
+
+   9. Termination.
+
+   If Developer violates the terms of this license, ONE store may
+   terminate the license immediately. In particular, the license may
+   be terminated immediately upon discovery of payment fraud,
+   manipulation, or transaction misconduct. Upon termination, Developer
+   must cease all use of the SDK immediately.
+
+   Survival: Notwithstanding termination, the following sections shall
+   survive: Intellectual Property (Section 6), Disclaimer and Limitation
+   of Liability (Sections 7 and 8), Indemnification (Section 11),
+   Governing Law and Jurisdiction (Section 10.1), and the prohibition
+   on providing the SDK to third parties without authorization
+   (Section 3(c)).
+
+   10. General Provisions.
+
+   10.1 Governing Law and Jurisdiction. This License shall be governed by
+   and construed in accordance with the laws of the Republic of Korea,
+   and disputes shall be subject to the jurisdiction of the Seoul
+   Central District Court.
+
+   10.2 Severability. If any provision of this License is found to be
+   invalid or unenforceable, the remaining provisions shall remain in
+   full force and effect.
+
+   10.3 Assignment. Developer may not assign this License without prior
+   written consent from ONE store.
+
+   10.4 License Updates. ONE store may periodically update this License,
+   and updated versions shall be posted at dev.onestore.net.
+
+   10.5 Export Compliance. Developer must comply with all applicable
+   export regulations in using the SDK.
+
+   10.6 Force Majeure. ONE store shall not be liable for failure to
+   perform obligations due to acts of God or causes beyond its reasonable
+   control.
+
+   10.7 Developer Account. A valid ONE store Developer account is
+   required to use the SDK.
+
+   10.8 Distribution Channels. The SDK is distributed only through
+   official ONE store channels, such as the ONE store CDN at
+   h5sdk.onestore.net.
+
+   10.9 No Waiver. Failure of ONE store to enforce any right under this
+   License shall not constitute a waiver of such right.
+
+   10.10 Entire Agreement. This License constitutes the entire
+   agreement between ONE store and Developer with respect to the use of
+   the SDK and supersedes all prior or contemporaneous agreements,
+   representations, or warranties, whether oral or written.
+
+   10.11 Privacy and Data Protection. Developer is responsible for
+   complying with all applicable privacy and data protection laws when
+   integrating and using the SDK and processing user or payment data.
+   ONE store is not responsible for how Developer handles user data within
+   Developer's game.
+
+   11. Indemnification.
+
+   Developer agrees to defend, indemnify, and hold harmless ONE store and
+   its officers, directors, and employees from and against any and all
+   third-party claims, actions, damages, losses, and costs (including
+   reasonable attorneys' fees) arising from (a) Developer's game,
+   (b) use of the SDK, or (c) breach of this Agreement.
+
+   12. Contact Information.
+
+   Email: devhelper@onestore.net
+   Developer Portal: dev.onestore.net
+
+   13. Acceptance.
+
+   By loading, integrating, or using the SDK or this repository,
+   Developer is deemed to have agreed to all terms of this Agreement.
+   Developer must not use the SDK or this repository if Developer does
+   not agree to this Agreement.
+
+                    END OF TERMS AND CONDITIONS
+
+                        ONE store Corp.
+                 Last Updated: September 30, 2026

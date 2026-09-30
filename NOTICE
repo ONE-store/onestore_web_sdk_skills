@@ -1,0 +1,23 @@
+=========================================================================
+  ONE store Web SDK Skill
+  Copyright (c) 2026 ONE store Corp.
+=========================================================================
+
+This product includes an Agent Skill bundle for integrating the ONE store
+H5 Game SDK into HTML5 web games, developed by ONE store Corp.
+
+This repository is licensed under the ONE store H5 Game SDK License
+Agreement. See the LICENSE file for the full terms.
+
+-----------------------------------------------------------------------------
+This product references the ONE store H5 Game SDK.
+-----------------------------------------------------------------------------
+
+  ONE store H5 Game SDK
+  Copyright (c) 2026 ONE store Corp. All Rights Reserved.
+
+  This repository does not contain the SDK. The SDK is loaded at runtime
+  from the ONE store CDN and is provided under the ONE store H5 Game SDK
+  License Agreement:
+
+  https://h5sdk.onestore.net/lib/{version}/onestore-h5-sdk.min.js
